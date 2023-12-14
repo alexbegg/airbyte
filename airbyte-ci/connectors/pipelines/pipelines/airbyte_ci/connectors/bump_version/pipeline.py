@@ -62,7 +62,7 @@ class AddChangelogEntry(Step):
                 stdout=f"Could not add changelog entry: {e}",
                 output_artifact=self.container_with_airbyte_repo,
             )
-        updated_repo_dir = self.repo_dir.with_new_file(str(doc_path), updated_doc)
+        updated_repo_dir = self.repo_dir.with_new_file(str(doc_path), contents=updated_doc)
         return StepResult(
             self,
             StepStatus.SUCCESS,
