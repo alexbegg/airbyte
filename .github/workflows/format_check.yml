@@ -2,6 +2,11 @@ name: Check for formatting errors
 run-name: Check for formatting errors on ${{ github.ref }}
 on:
   workflow_dispatch:
+    inputs:
+      airbyte-ci-binary-url:
+        description: "URL to airbyte-ci binary"
+        required: false
+        default: https://connectors.airbyte.com/airbyte-ci/releases/ubuntu/latest/airbyte-ci
   push:
     branches:
       - master
@@ -63,6 +68,7 @@ jobs:
           github_token: ${{ secrets.GH_PAT_MAINTENANCE_OCTAVIA }}
           tailscale_auth_key: ${{ secrets.TAILSCALE_AUTH_KEY }}
           subcommand: "format check all"
+          airbyte_ci_binary_url: ${{ github.event.inputs.airbyte-ci-binary-url }}
 
       - name: Match GitHub User to Slack User [MASTER]
         if: github.ref == 'refs/heads/master'
