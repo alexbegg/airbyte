@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 jobs:
   format-fix:
-    runs-on: "ci-runner-connector-format-medium-dagger-0-6-4"
+    runs-on: "ci-runner-connector-format-medium-dagger-0-9-4"
     name: "Run airbyte-ci format fix all"
     steps:
       - name: Checkout Airbyte

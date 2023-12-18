@@ -19,7 +19,7 @@ on:
 jobs:
   run-airbyte-ci-tests:
     name: Run Airbyte CI tests
-    runs-on: "ci-runner-connector-test-large-dagger-0-6-4"
+    runs-on: "ci-runner-connector-test-large-dagger-0-9-4"
     steps:
       - name: Checkout Airbyte
         uses: actions/checkout@v3
