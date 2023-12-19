@@ -104,7 +104,9 @@ def mark_dagger_wrap():
 
 def call_current_command_with_dagger_run():
     mark_dagger_wrap()
-    if (os.environ.get("AIRBYTE_ROLE") == "airbyter") or (os.environ.get("CI") == "True"):
+    # We're enabling telemetry only for local runs.
+    # CI runs already have telemetry as DAGGER_CLOUD_TOKEN env var is set on the CI.
+    if (os.environ.get("AIRBYTE_ROLE") == "airbyter") and not os.environ.get("CI"):
         os.environ[DAGGER_TELEMETRY_TOKEN_ENV_VAR_NAME_VALUE[0]] = DAGGER_TELEMETRY_TOKEN_ENV_VAR_NAME_VALUE[1]
 
     exit_code = 0
