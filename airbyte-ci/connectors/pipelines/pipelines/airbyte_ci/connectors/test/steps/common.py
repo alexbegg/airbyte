@@ -20,13 +20,14 @@ from pipelines.consts import CIContext
 from pipelines.dagger.actions import secrets
 from pipelines.dagger.containers import internal_tools
 from pipelines.helpers.utils import METADATA_FILE_NAME
-from pipelines.models.contexts.pipeline_context import PipelineContext
+from pipelines.models.contexts.pipeline_context import ConnectorContext
 from pipelines.models.steps import Step, StepResult, StepStatus
 
 
 class VersionCheck(Step, ABC):
     """A step to validate the connector version was bumped if files were modified"""
 
+    context: ConnectorContext
     GITHUB_URL_PREFIX_FOR_CONNECTORS = "https://raw.githubusercontent.com/airbytehq/airbyte/master/airbyte-integrations/connectors"
     failure_message: ClassVar
     should_run = True
@@ -80,6 +81,7 @@ class VersionCheck(Step, ABC):
 
 
 class VersionIncrementCheck(VersionCheck):
+    context: ConnectorContext
     title = "Connector version increment check"
 
     BYPASS_CHECK_FOR = [
@@ -115,6 +117,7 @@ class VersionIncrementCheck(VersionCheck):
 
 
 class VersionFollowsSemverCheck(VersionCheck):
+    context: ConnectorContext
     title = "Connector version semver check"
 
     @property
@@ -133,6 +136,7 @@ class VersionFollowsSemverCheck(VersionCheck):
 class QaChecks(Step):
     """A step to run QA checks for a connector."""
 
+    context: ConnectorContext
     title = "QA checks"
 
     async def _run(self) -> StepResult:
@@ -181,6 +185,7 @@ class QaChecks(Step):
 class AcceptanceTests(Step):
     """A step to run acceptance tests for a connector if it has an acceptance test config file."""
 
+    context: ConnectorContext
     title = "Acceptance tests"
     CONTAINER_TEST_INPUT_DIRECTORY = "/test_input"
     CONTAINER_SECRETS_DIRECTORY = "/test_input/secrets"
@@ -204,11 +209,11 @@ class AcceptanceTests(Step):
             command += ["--numprocesses=auto"]  # Using pytest-xdist to run tests in parallel, auto means using all available cores
         return command
 
-    def __init__(self, context: PipelineContext, concurrent_test_run: Optional[bool] = False) -> None:
+    def __init__(self, context: ConnectorContext, concurrent_test_run: Optional[bool] = False) -> None:
         """Create a step to run acceptance tests for a connector if it has an acceptance test config file.
 
         Args:
-            context (PipelineContext): The current test context, providing a connector object, a dagger client and a repository directory.
+            context (ConnectorContext): The current test context, providing a connector object, a dagger client and a repository directory.
             concurrent_test_run (Optional[bool], optional): Whether to run acceptance tests in parallel. Defaults to False.
         """
         super().__init__(context)
@@ -301,6 +306,7 @@ class AcceptanceTests(Step):
 
 
 class CheckBaseImageIsUsed(Step):
+    context: ConnectorContext
     title = "Check our base image is used"
 
     async def _run(self, *args, **kwargs) -> StepResult:

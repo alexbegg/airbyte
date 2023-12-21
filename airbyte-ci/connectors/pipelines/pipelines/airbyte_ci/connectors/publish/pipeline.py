@@ -25,6 +25,7 @@ class InvalidSpecOutputError(Exception):
 
 
 class CheckConnectorImageDoesNotExist(Step):
+    context: PublishConnectorContext
     title = "Check if the connector docker image does not exist on the registry."
 
     async def _run(self) -> StepResult:
@@ -52,6 +53,7 @@ class CheckConnectorImageDoesNotExist(Step):
 
 
 class PushConnectorImageToRegistry(Step):
+    context: PublishConnectorContext
     title = "Push connector image to registry"
 
     @property
@@ -82,6 +84,7 @@ class PushConnectorImageToRegistry(Step):
 
 
 class PullConnectorImageFromRegistry(Step):
+    context: PublishConnectorContext
     title = "Pull connector image from registry"
 
     async def check_if_image_only_has_gzip_layers(self) -> bool:
@@ -137,6 +140,7 @@ class PullConnectorImageFromRegistry(Step):
 
 
 class UploadSpecToCache(Step):
+    context: PublishConnectorContext
     title = "Upload connector spec to spec cache bucket"
     default_spec_file_name = "spec.json"
     cloud_spec_file_name = "spec.cloud.json"

@@ -6,7 +6,7 @@
 
 import sys
 from pathlib import Path
-from typing import Callable, List, Optional
+from typing import Callable, List, Optional, Sequence
 
 import anyio
 import dagger
@@ -74,14 +74,14 @@ async def run_report_complete_pipeline(dagger_client: dagger.Client, contexts: L
 
 
 async def run_connectors_pipelines(
-    contexts: List[ConnectorContext],
+    contexts: Sequence[ConnectorContext],
     connector_pipeline: Callable,
     pipeline_name: str,
     concurrency: int,
     dagger_logs_path: Optional[Path],
     execute_timeout: Optional[int],
     *args,
-) -> List[ConnectorContext]:
+) -> Sequence[ConnectorContext]:
     """Run a connector pipeline for all the connector contexts."""
 
     default_connectors_semaphore = anyio.Semaphore(concurrency)

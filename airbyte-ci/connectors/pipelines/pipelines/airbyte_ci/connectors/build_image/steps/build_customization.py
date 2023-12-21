@@ -7,7 +7,7 @@ from logging import Logger
 from types import ModuleType
 from typing import List, Optional
 
-from connector_ops.utils import Connector
+from connector_ops.utils import Connector  # type: ignore
 from dagger import Container
 
 BUILD_CUSTOMIZATION_MODULE_NAME = "build_customization"
@@ -23,9 +23,13 @@ def get_build_customization_module(connector: Connector) -> Optional[ModuleType]
     build_customization_spec_path = connector.code_directory / BUILD_CUSTOMIZATION_SPEC_NAME
     if not build_customization_spec_path.exists():
         return None
+    
     build_customization_spec = importlib.util.spec_from_file_location(
         f"{connector.code_directory.name}_{BUILD_CUSTOMIZATION_MODULE_NAME}", build_customization_spec_path
     )
+    if not build_customization_spec:
+        return None
+    
     build_customization_module = importlib.util.module_from_spec(build_customization_spec)
     build_customization_spec.loader.exec_module(build_customization_module)
     return build_customization_module

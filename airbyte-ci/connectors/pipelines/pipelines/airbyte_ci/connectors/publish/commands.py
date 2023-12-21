@@ -2,8 +2,11 @@
 # Copyright (c) 2023 Airbyte, Inc., all rights reserved.
 #
 
+from typing import Sequence
+
 import asyncclick as click
 from pipelines import main_logger
+from pipelines.airbyte_ci.connectors.context import ConnectorContext
 from pipelines.airbyte_ci.connectors.pipeline import run_connectors_pipelines
 from pipelines.airbyte_ci.connectors.publish.context import PublishConnectorContext
 from pipelines.airbyte_ci.connectors.publish.pipeline import reorder_contexts, run_connector_publish_pipeline
@@ -79,7 +82,7 @@ async def publish(
 
     fail_if_missing_docker_hub_creds(ctx)
 
-    publish_connector_contexts = reorder_contexts(
+    publish_connector_contexts: Sequence[ConnectorContext] = reorder_contexts(
         [
             PublishConnectorContext(
                 connector=connector,

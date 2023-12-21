@@ -5,6 +5,7 @@
 import json
 import webbrowser
 from dataclasses import dataclass
+from typing import TYPE_CHECKING
 
 from anyio import Path
 from connector_ops.utils import console
@@ -19,10 +20,15 @@ from rich.style import Style
 from rich.table import Table
 from rich.text import Text
 
+if TYPE_CHECKING:
+    from pipelines.airbyte_ci.connectors.context import ConnectorContext
+
 
 @dataclass(frozen=True)
 class ConnectorReport(Report):
     """A dataclass to build connector test reports to share pipelines executions results with the user."""
+
+    pipeline_context: ConnectorContext
 
     @property
     def report_output_prefix(self) -> str:  # noqa D102

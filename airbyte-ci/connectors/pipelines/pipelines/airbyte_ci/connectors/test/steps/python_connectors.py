@@ -5,10 +5,8 @@
 """This module groups steps made to run tests for a specific Python connector given a test context."""
 
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
-from typing import Callable, Dict, Iterable, List, Tuple, Union
+from typing import Callable, Iterable, List, Tuple
 
-import asyncer
 import pipelines.dagger.actions.python.common
 import pipelines.dagger.actions.system.docker
 from dagger import Container, File
@@ -18,12 +16,14 @@ from pipelines.airbyte_ci.connectors.context import ConnectorContext
 from pipelines.airbyte_ci.connectors.test.steps.common import AcceptanceTests, CheckBaseImageIsUsed
 from pipelines.consts import LOCAL_BUILD_PLATFORM
 from pipelines.dagger.actions import secrets
-from pipelines.helpers.run_steps import StepToRun
-from pipelines.models.steps import Step, StepResult, StepStatus
+from pipelines.helpers.run_steps import STEP_TREE, StepToRun
+from pipelines.models.steps import Step, StepResult
 
 
 class PytestStep(Step, ABC):
     """An abstract class to run pytest tests and evaluate success or failure according to pytest logs."""
+
+    context: ConnectorContext
 
     PYTEST_INI_FILE_NAME = "pytest.ini"
     PYPROJECT_FILE_NAME = "pyproject.toml"
@@ -196,7 +196,7 @@ class IntegrationTests(PytestStep):
     bind_to_docker_host = True
 
 
-def get_test_steps(context: ConnectorContext) -> List[StepToRun]:
+def get_test_steps(context: ConnectorContext) -> STEP_TREE:
     """
     Get all the tests steps for a Python connector.
     """

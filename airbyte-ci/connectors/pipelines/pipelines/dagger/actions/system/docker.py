@@ -210,7 +210,7 @@ async def load_image_to_docker_host(context: ConnectorContext, tar_file: File, i
 
 
 def with_crane(
-    context: PipelineContext,
+    context: ConnectorContext,
 ) -> Container:
     """Crane is a tool to analyze and manipulate container images.
     We can use it to extract the image manifest and the list of layers or list the existing tags on an image repository.

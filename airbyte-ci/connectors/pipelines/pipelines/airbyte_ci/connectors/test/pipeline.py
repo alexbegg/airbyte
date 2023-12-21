@@ -13,7 +13,7 @@ from pipelines.airbyte_ci.connectors.reports import ConnectorReport
 from pipelines.airbyte_ci.connectors.test.steps import java_connectors, python_connectors
 from pipelines.airbyte_ci.connectors.test.steps.common import QaChecks, VersionFollowsSemverCheck, VersionIncrementCheck
 from pipelines.airbyte_ci.metadata.pipeline import MetadataValidation
-from pipelines.helpers.run_steps import StepToRun, run_steps
+from pipelines.helpers.run_steps import STEP_TREE, StepToRun, run_steps
 
 LANGUAGE_MAPPING = {
     "get_test_steps": {
@@ -24,7 +24,7 @@ LANGUAGE_MAPPING = {
 }
 
 
-def get_test_steps(context: ConnectorContext) -> List[StepToRun]:
+def get_test_steps(context: ConnectorContext) -> STEP_TREE:
     """Get all the tests steps according to the connector language.
 
     Args:
@@ -64,7 +64,7 @@ async def run_connector_test_pipeline(context: ConnectorContext, semaphore: anyi
                 options=context.run_step_options,
             )
 
-            results = result_dict.values()
+            results = list(result_dict.values())
             context.report = ConnectorReport(context, steps_results=results, name="TEST RESULTS")
 
         return context.report

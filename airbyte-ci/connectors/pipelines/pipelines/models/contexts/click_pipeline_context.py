@@ -29,7 +29,7 @@ class ClickPipelineContext(BaseModel, Singleton):
     dockerd_service: Optional[Container] = Field(default=None)
     _dagger_client: Optional[Client] = PrivateAttr(default=None)
     _click_context: Callable[[], Context] = PrivateAttr(default_factory=lambda: get_current_context)
-    _og_click_context: Callable[[], Context] = PrivateAttr(default=None)
+    _og_click_context: Context = PrivateAttr(default=None)
 
     @property
     def params(self):

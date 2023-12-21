@@ -15,7 +15,7 @@ from typing import TYPE_CHECKING, Any, ClassVar, Optional, Union
 import anyio
 import asyncer
 import click
-from dagger import Container, DaggerError
+from dagger import Client, Container, DaggerError
 from pipelines import main_logger
 from pipelines.helpers import sentry_utils
 from pipelines.helpers.utils import format_duration, get_exec_result
@@ -177,7 +177,7 @@ class Step(ABC):
             return disabled_logger
 
     @property
-    def dagger_client(self) -> Container:
+    def dagger_client(self) -> Client:
         return self.context.dagger_client.pipeline(self.title)
 
     async def log_progress(self, completion_event: anyio.Event) -> None:

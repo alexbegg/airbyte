@@ -18,6 +18,8 @@ class BuildConnectorImagesBase(Step, ABC):
     A step to build connector images for a set of platforms.
     """
 
+    context: ConnectorContext
+
     @property
     def title(self):
         return f"Build {self.context.connector.technical_name} docker image for platform(s) {', '.join(self.build_platforms)}"

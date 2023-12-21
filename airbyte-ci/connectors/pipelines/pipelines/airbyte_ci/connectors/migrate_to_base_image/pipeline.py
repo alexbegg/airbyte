@@ -19,6 +19,8 @@ from pipelines.models.steps import Step, StepResult, StepStatus
 
 
 class UpgradeBaseImageMetadata(Step):
+    context: ConnectorContext
+
     title = "Upgrade the base image to the latest version in metadata.yaml"
 
     def __init__(
@@ -91,6 +93,8 @@ class UpgradeBaseImageMetadata(Step):
 
 
 class DeleteConnectorFile(Step):
+    context: ConnectorContext
+
     def __init__(
         self,
         context: ConnectorContext,
@@ -122,6 +126,8 @@ class DeleteConnectorFile(Step):
 
 
 class AddBuildInstructionsToReadme(Step):
+    context: ConnectorContext
+
     title = "Add build instructions to README.md"
 
     def __init__(self, context: PipelineContext, repo_dir: Directory) -> None:
